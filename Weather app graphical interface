@@ -1,0 +1,71 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+"""
+Weather app graphical interface
+It generally works, but could be improved in many ways
+Downloads weather data for recent day, for Kraków only (hardcoded in quarry), and present it in simple form
+"""
+from tkinter import *
+from PIL import ImageTk, Image
+import requests
+import json
+#import tkinter.scrolledtext as st
+
+root = Tk()
+root.title("Simple Weather Application proudly made by Paweł Zegadło")
+root.iconbitmap('icon.ico') #nice icon
+
+# main image of app
+my_img = ImageTk.PhotoImage(Image.open("background.png"))
+my_label = Label(image=my_img)
+my_label.grid(row=0, column=0) #could be .pack, but it is incompatible with grid
+
+#Location for the weather data
+Location = Entry(root, width=80, bg="white", fg="blue") #creating data entry widget
+Location.grid(row=3, column=0)
+Location.insert(0, "Kraków,Poland") # in this version localization is hard coded, querry builder can bi impplemented
+
+#this is an action done by clickig button
+def aClick():
+    bLabel = Label(root, text="Weather at " + Location.get())
+    bLabel.grid(row=1, column=0)
+    try:
+        api_request = requests.get("https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Krak%C3%B3w/today?unitGroup=metric&include=days&key=47Y7T5NVZXLU8DEX92ZDY7EA7&contentType=json")
+        api = json.loads(api_request.content)
+        city = api['address']
+        date = api['days'][0]['datetime']
+        temp = api['days'][0]['temp']
+        tempmin = api['days'][0]['tempmin']
+        tempmax = api['days'][0]['tempmax']
+        humid = api['days'][0]['humidity']
+        cloudcover = api['days'][0]['cloudcover']
+        conditions = api['days'][0]['conditions']
+        dataLabel1 = Label(root, text= city + " on "+ date+ " expected temperature: "+str(temp)+"°C from: "+str(tempmin)+"°C to: "+str(tempmax)+"°C, humidity: "+str(humid))
+        dataLabel2 = Label(root, text= "Percentage of cloud cover: " + str(cloudcover) + "% expected conditions: "+ str(conditions))
+        dataLabel1.grid(row=10, column=0)
+        dataLabel2.grid(row=12, column=0)
+        #text_area = st.ScrolledText(root, width = 60, height = 4, font = ("Times New Roman", 15))
+        #text_area.grid(row = 1, column = 0, pady = 11, padx = 10)
+        #text_area.insert(INSERT, text= city + " on "+ date+ " expected temperature: "+str(temp)+"°C from: "+str(tempmin)+"°C to: "+str(tempmax)+"°C, humidity: "+str(humid))
+
+    except Exception as exc:
+        api = "Error"
+        dataLabel = Label(root, text=api)
+        dataLabel.grid(row=10, column=0)
+
+aButton = Button(root, text="Push to forecast a weather :)", padx = 40, pady = 40, command=aClick, bg="white", fg="blue")
+aButton.grid(row=2, column=0)
+
+button_quit = Button(root, text="Exit Application", command=root.quit)
+button_quit.grid(row=14, column=0, sticky=W+E)
+#This should work, but bc it is killing my kernel, so from jupyter level it is useless, but works
+
+root.mainloop()
+
+
+# In[ ]:
+
+
+
+
