@@ -1,12 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[43]:
-
-
 # Testing Python programs (networkx)
-
-print("Tests for the Vector class using the 'unittest' module.")
 
 class Vector:
 
@@ -82,9 +77,6 @@ if __name__ == "__main__":
     unittest.main(argv=['first-arg-is-ignored'], exit=False) 
 
 #that (...) is because I work on interactive environment and simple() caused error
-
-
-# In[ ]:
 
 
 
