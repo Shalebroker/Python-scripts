@@ -51,8 +51,3 @@ button.pack( expand=True)
 root.mainloop()
 
 
-# In[ ]:
-
-
-
-
